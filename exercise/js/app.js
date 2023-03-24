@@ -2,12 +2,49 @@ let questions = [];
 //let unansweredQuestionIndex = [];
 let score = 0;
 const numProblems = 10;
+let problem;
+let problemNumber = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   generateProblems(numProblems);
   displayNextProblem();
 
+  const answersOnpage = document.querySelectorAll("li");
+  answersOnpage.forEach((answerOnPage) => {
+    answerOnPage.addEventListener("click", (event) => {
+      console.log(
+        `${event.target.innerText} correct answer: ${problem.correctAnswer}`
+      );
+      if (event.target.innerText == problem.correctAnswer) {
+        score++;
+        let currentScore = document.querySelector(".currentScore");
+        currentScore.innerText = score;
+      }
+      if (questions.length > 0) {
+        displayNextProblem();
+      } else {
+        let showhide = Array.from(document.getElementsByClassName("show-hide"));
+        showhide.forEach((element) => {
+          element.classList.add("hidden");
+        });
+      }
+    });
+  });
+  const startOver = document.getElementById("btnStartOver");
+  startOver.addEventListener("click", () => {
+    generateProblems(numProblems);
+    problemNumber = 0;
+    score = 0;
+    let currentScore = document.querySelector(".currentScore");
+    currentScore.innerText = score;
+    let currentProblem = document.querySelector(".currentProblem");
+    currentProblem.innerText = problemNumber;
+    let showhide = Array.from(document.getElementsByClassName("hidden"));
 
+    showhide.forEach((element) => {
+      element.classList.remove("hidden");
+    });
+  });
 });
 
 function generateProblem() {
@@ -25,11 +62,12 @@ function generateProblem() {
     numOne: numOne,
     numTwo: numTwo,
     correctAnswer: correctAnswer,
-    answers: answers
+    answers: answers,
   };
 }
 
 function generateProblems(num) {
+  questions = [];
   for (let i = 0; i < num; i++) {
     questions.push(generateProblem());
     //unansweredQuestionIndex.push(i);
@@ -39,34 +77,19 @@ function generateProblems(num) {
 
 function displayNextProblem() {
   //let problemNumber = getRandomNumber(numProblems);
-  if(questions.length > 0){
-    let problem = questions.pop();
-    const expression = document.querySelector(".expression");
-    expression.innerText = `${problem.numOne} * ${problem.numTwo}`;
-  
-    const answersOnpage = document.querySelectorAll("li");
-    answersOnpage.forEach((answerOnPage) => {
-      answerOnPage.innerText = problem.answers.pop();
 
-      answerOnPage.addEventListener('click', (event) => {
-        console.log(`${event.target.innerText} correct answer: ${problem.correctAnswer}`);
-        if(event.target.innerText = problem.correctAnswer){
-          score += 1;
-          displayNextProblem();
-        }})
-      //   else {
-      //     let showhide = Array.from(document.getElementsByClassName("show-hide"));
-      //     showhide.foreach((element) => {           //stuff
-      //       })
-      //     }
-      //   })
-      })
-    }
+  problemNumber++;
+  let currentProblem = document.querySelector(".currentProblem");
+  currentProblem.innerText = problemNumber;
+  problem = questions.pop();
+  const expression = document.querySelector(".expression");
+  expression.innerText = `${problem.numOne} * ${problem.numTwo}`;
 
+  const answersOnpage = document.querySelectorAll("li");
+  answersOnpage.forEach((answerOnPage) => {
+    answerOnPage.innerText = problem.answers.pop();
+  });
 }
-  
-
-
 
 /**
  * Utility function to generate a random number based on max
