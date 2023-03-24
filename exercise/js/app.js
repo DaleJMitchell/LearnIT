@@ -44,15 +44,16 @@ function displayNextProblem() {
     const expression = document.querySelector(".expression");
     expression.innerText = `${problem.numOne} * ${problem.numTwo}`;
   
-    const answersOnpage = Array.from(document.querySelectorAll("li"));
+    const answersOnpage = document.querySelectorAll("li");
     answersOnpage.forEach((answerOnPage) => {
       answerOnPage.innerText = problem.answers.pop();
 
-      // answerOnpage.addEventListener('click', (event) => {
-      //   if(event.target.innerText = problem.correctAnswer){
-      //     score++;
-      //     //displayNextProblem();
-      //   }
+      answerOnPage.addEventListener('click', (event) => {
+        console.log(`${event.target.innerText} correct answer: ${problem.correctAnswer}`);
+        if(event.target.innerText = problem.correctAnswer){
+          score += 1;
+          displayNextProblem();
+        }})
       //   else {
       //     let showhide = Array.from(document.getElementsByClassName("show-hide"));
       //     showhide.foreach((element) => {           //stuff
